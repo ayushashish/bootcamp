@@ -3,10 +3,13 @@ const dotenv = require("dotenv");
 const logger = require("./middleware/logger");
 const morgan = require("morgan");
 const connectDB = require("./config/db");
+const cookieParser = require("cookie-parser");
 
 // Route files
 const bootcamps = require("./routes/bootcamps");
 const errorHandler = require("./middleware/error");
+const courses = require("./routes/courses");
+const auth = require("./routes/auth");
 
 // Load env vars
 dotenv.config({ path: "./config/config.env" });
@@ -24,7 +27,13 @@ if (process.env.NODE_ENV === "development") {
 // Body parser
 app.use(express.json());
 
+// Cookie parser
+app.use(cookieParser());
+
+// Mount routers
 app.use("/api/v1/bootcamps", bootcamps);
+app.use("/api/v1/courses", courses);
+app.use("/api/v1/auth", auth);
 
 app.use(errorHandler);
 
